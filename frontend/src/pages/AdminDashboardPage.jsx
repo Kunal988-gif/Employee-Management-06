@@ -67,7 +67,7 @@ function AdminDashboardPage({ token }) {
         <div className="stat-card warning">
           <span className="stat-label">Pending Requests</span>
           <div className="stat-value">{stats ? stats.pendingCount : 0}</div>
-          <Link to="/admin/requests" style={{ fontSize: '0.82rem', color: '#d97706', marginTop: '6px', fontWeight: 600 }}>
+          <Link to="/admin/requests?status=pending" style={{ fontSize: '0.82rem', color: '#d97706', marginTop: '6px', fontWeight: 600 }}>
             Review pending →
           </Link>
         </div>

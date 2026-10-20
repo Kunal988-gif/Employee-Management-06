@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { getAllLeaves, updateLeaveStatus } from '../api/leaveRequestApi';
 import LoadingState from '../components/LoadingState';
 import ErrorState from '../components/ErrorState';
 import EmptyState from '../components/EmptyState';
 
 function AdminRequestsPage({ token }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const statusFilter = searchParams.get('status') || '';
+
   const [requests, setRequests] = useState([]);
-  const [statusFilter, setStatusFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionSuccess, setActionSuccess] = useState('');
@@ -103,7 +105,14 @@ function AdminRequestsPage({ token }) {
             className="form-control"
             style={{ width: 'auto' }}
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val) {
+                setSearchParams({ status: val });
+              } else {
+                setSearchParams({});
+              }
+            }}
           >
             <option value="">All Requests</option>
             <option value="pending">Pending</option>
