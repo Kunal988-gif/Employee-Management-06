@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLeaveTypes } from '../api/leaveTypeApi';
 import { applyLeave, getMyBalances } from '../api/leaveRequestApi';
-import LoadingState from '../components/LoadingState';
 
 function ApplyLeavePage({ token }) {
   const navigate = useNavigate();
@@ -35,7 +34,7 @@ function ApplyLeavePage({ token }) {
           setBalances(balancesData.data);
         }
       } catch (err) {
-        setError('Failed to load leave types or balances');
+        setError('Failed to load leave types');
       } finally {
         setPageLoading(false);
       }
@@ -44,22 +43,16 @@ function ApplyLeavePage({ token }) {
     fetchData();
   }, [token]);
 
-  const calculateEstimatedDays = () => {
+  const calculateDays = () => {
     if (!startDate || !endDate) return 0;
     const s = new Date(startDate);
     const e = new Date(endDate);
     if (e < s) return 0;
-
-    let count = 0;
-    const cur = new Date(s);
-    while (cur <= e) {
-      if (cur.getDay() !== 0) count++;
-      cur.setDate(cur.getDate() + 1);
-    }
-    return count;
+    const diff = Math.ceil((e.getTime() - s.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+    return diff > 0 ? diff : 0;
   };
 
-  const estimatedDays = calculateEstimatedDays();
+  const estimatedDays = calculateDays();
   const selectedBalance = balances.find((b) => b.leaveTypeId === leaveType);
 
   const handleSubmit = async (e) => {
@@ -75,24 +68,19 @@ function ApplyLeavePage({ token }) {
 
     try {
       const result = await applyLeave(
-        {
-          leaveType,
-          startDate,
-          endDate,
-          reason
-        },
+        { leaveType, startDate, endDate, reason },
         token
       );
 
       if (!result.success) {
-        setError(result.message || 'Failed to submit leave request');
+        setError(result.message || 'Failed to submit request');
         setSubmitting(false);
         return;
       }
 
       navigate('/my-leaves');
     } catch (err) {
-      setError('Server connection error. Please try again.');
+      setError('Server connection error');
       setSubmitting(false);
     }
   };
@@ -100,27 +88,21 @@ function ApplyLeavePage({ token }) {
   if (pageLoading) {
     return (
       <div className="container">
-        <LoadingState message="Loading leave application form..." />
+        <p style={{ textAlign: 'center', padding: '20px' }}>Loading form...</p>
       </div>
     );
   }
 
   return (
-    <div className="container" style={{ maxWidth: '680px' }}>
+    <div className="container" style={{ maxWidth: '600px' }}>
       <div className="card">
-        <h2 className="card-title">Apply for Leave</h2>
+        <h2 style={{ marginBottom: '16px' }}>Apply for Leave</h2>
 
         {error && <div className="alert alert-danger">{error}</div>}
 
         {selectedBalance && (
-          <div className="alert alert-info" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <strong>{selectedBalance.leaveTypeName} Balance:</strong> Available{' '}
-              <span style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{selectedBalance.availableBalance}</span> of {selectedBalance.yearlyQuota} days
-            </div>
-            {selectedBalance.usedDays > 0 && (
-              <span style={{ fontSize: '0.85rem' }}>({selectedBalance.usedDays} days already used)</span>
-            )}
+          <div className="alert alert-info">
+            <strong>{selectedBalance.leaveTypeName} Balance:</strong> {selectedBalance.availableBalance} of {selectedBalance.yearlyQuota} days available
           </div>
         )}
 
@@ -136,7 +118,7 @@ function ApplyLeavePage({ token }) {
             >
               {leaveTypes.map((type) => (
                 <option key={type._id} value={type._id}>
-                  {type.name} ({type.yearlyQuota} days/year)
+                  {type.name} ({type.yearlyQuota} days)
                 </option>
               ))}
             </select>
@@ -169,16 +151,16 @@ function ApplyLeavePage({ token }) {
           </div>
 
           {startDate && endDate && (
-            <div style={{ marginBottom: '16px', fontSize: '0.9rem', color: '#475569' }}>
-              <strong>Estimated working days:</strong> {estimatedDays} day(s) (Sundays are excluded)
-            </div>
+            <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '12px' }}>
+              Total Days: <strong>{estimatedDays}</strong>
+            </p>
           )}
 
           <div className="form-group">
-            <label htmlFor="reason">Reason for Leave *</label>
+            <label htmlFor="reason">Reason *</label>
             <textarea
               id="reason"
-              rows="4"
+              rows="3"
               className="form-control"
               placeholder="Reason for leave"
               value={reason}

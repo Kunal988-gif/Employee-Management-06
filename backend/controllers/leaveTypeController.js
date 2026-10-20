@@ -58,11 +58,11 @@ const createLeaveType = async (req, res, next) => {
       });
     }
 
-    const existing = await LeaveType.findOne({ name: { $regex: new RegExp(`^${name.trim()}$`, 'i') } });
+    const existing = await LeaveType.findOne({ name: name.trim() });
     if (existing) {
       return res.status(409).json({
         success: false,
-        message: `Leave type '${name}' already exists`
+        message: 'Leave type already exists'
       });
     }
 
@@ -97,12 +97,12 @@ const updateLeaveType = async (req, res, next) => {
     if (name) {
       const duplicate = await LeaveType.findOne({
         _id: { $ne: req.params.id },
-        name: { $regex: new RegExp(`^${name.trim()}$`, 'i') }
+        name: name.trim()
       });
       if (duplicate) {
         return res.status(409).json({
           success: false,
-          message: `Another leave type with name '${name}' already exists`
+          message: 'Another leave type with this name already exists'
         });
       }
       leaveType.name = name.trim();

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getMyLeaves, cancelLeave, getMyBalances } from '../api/leaveRequestApi';
-import LoadingState from '../components/LoadingState';
-import ErrorState from '../components/ErrorState';
-import EmptyState from '../components/EmptyState';
 
 function MyLeavesPage({ token }) {
   const [leaves, setLeaves] = useState([]);
@@ -31,7 +28,7 @@ function MyLeavesPage({ token }) {
         setBalances(balancesRes.data);
       }
     } catch (err) {
-      setError('Unable to load leave data. Please check your backend connection.');
+      setError('Unable to load leave data');
     } finally {
       setLoading(false);
     }
@@ -42,18 +39,18 @@ function MyLeavesPage({ token }) {
   }, [token]);
 
   const handleCancel = async (id) => {
-    if (!window.confirm('Are you sure you want to cancel this pending leave request?')) {
+    if (!window.confirm('Cancel this pending leave request?')) {
       return;
     }
 
     try {
       const res = await cancelLeave(id, token);
       if (res.success) {
-        setActionMessage('Leave request cancelled successfully');
+        setActionMessage('Leave request cancelled');
         loadData();
-        setTimeout(() => setActionMessage(''), 4000);
+        setTimeout(() => setActionMessage(''), 3000);
       } else {
-        alert(res.message || 'Failed to cancel leave request');
+        alert(res.message || 'Failed to cancel');
       }
     } catch (err) {
       alert('Error cancelling leave request');
@@ -62,10 +59,10 @@ function MyLeavesPage({ token }) {
 
   return (
     <div className="container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800 }}>My Leaves & Balances</h1>
-          <p style={{ color: '#64748b', fontSize: '0.95rem' }}>Track your leave balances and request history</p>
+          <h2>My Leaves & Balances</h2>
+          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Check your leave balances and history</p>
         </div>
         <Link to="/apply-leave" className="btn btn-primary">
           + Apply for Leave
@@ -79,24 +76,23 @@ function MyLeavesPage({ token }) {
           <div key={b.leaveTypeId} className="stat-card">
             <span className="stat-label">{b.leaveTypeName}</span>
             <div className="stat-value">{b.availableBalance}</div>
-            <div style={{ fontSize: '0.82rem', color: '#64748b', marginTop: '6px' }}>
-              Used: {b.usedDays} / {b.yearlyQuota} days quota
+            <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '4px' }}>
+              Used: {b.usedDays} / {b.yearlyQuota} days
             </div>
           </div>
         ))}
       </div>
 
       <div className="card">
-        <h2 className="card-title">Leave History</h2>
+        <h3 style={{ marginBottom: '16px' }}>Leave History</h3>
 
-        {loading && <LoadingState message="Loading your leave history..." />}
-        {error && <ErrorState message={error} onRetry={loadData} />}
+        {loading && <p style={{ textAlign: 'center', padding: '20px' }}>Loading leaves...</p>}
+        {error && <div className="alert alert-danger">{error}</div>}
 
         {!loading && !error && leaves.length === 0 && (
-          <EmptyState
-            title="No Leave Requests Found"
-            message="You have not submitted any leave requests yet. Click 'Apply for Leave' to get started."
-          />
+          <p style={{ textAlign: 'center', padding: '20px', color: '#64748b' }}>
+            No leave requests submitted yet. Click "+ Apply for Leave" to apply.
+          </p>
         )}
 
         {!loading && !error && leaves.length > 0 && (
@@ -116,24 +112,22 @@ function MyLeavesPage({ token }) {
               <tbody>
                 {leaves.map((item) => (
                   <tr key={item._id}>
-                    <td>
-                      <strong>{item.leaveType ? item.leaveType.name : 'Unknown'}</strong>
-                    </td>
+                    <td><strong>{item.leaveType ? item.leaveType.name : 'Unknown'}</strong></td>
                     <td>
                       {new Date(item.startDate).toLocaleDateString()} to {new Date(item.endDate).toLocaleDateString()}
                     </td>
                     <td>{item.numberOfDays}</td>
-                    <td style={{ maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <td style={{ maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {item.reason}
                     </td>
                     <td>
                       <span className={`badge badge-${item.status}`}>{item.status}</span>
                     </td>
-                    <td style={{ color: '#64748b', fontSize: '0.85rem' }}>
-                      {item.adminRemarks || '—'}
+                    <td style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                      {item.adminRemarks || '-'}
                     </td>
                     <td>
-                      <div style={{ display: 'flex', gap: '8px' }}>
+                      <div style={{ display: 'flex', gap: '6px' }}>
                         <Link to={`/my-leaves/${item._id}`} className="btn btn-secondary btn-sm">
                           View
                         </Link>

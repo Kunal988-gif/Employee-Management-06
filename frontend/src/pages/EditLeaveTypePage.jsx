@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import LeaveTypeForm from '../components/LeaveTypeForm';
 import { getLeaveTypeById, updateLeaveType } from '../api/leaveTypeApi';
-import LoadingState from '../components/LoadingState';
-import ErrorState from '../components/ErrorState';
 
 function EditLeaveTypePage({ token }) {
   const { id } = useParams();
@@ -26,7 +24,7 @@ function EditLeaveTypePage({ token }) {
         setFetchError(res.message || 'Leave type not found');
       }
     } catch (err) {
-      setFetchError('Unable to load leave type details');
+      setFetchError('Unable to load leave type');
     } finally {
       setPageLoading(false);
     }
@@ -51,7 +49,7 @@ function EditLeaveTypePage({ token }) {
 
       navigate('/admin/leave-types');
     } catch (err) {
-      setError('Server error occurred. Please try again.');
+      setError('Server error');
       setSubmitting(false);
     }
   };
@@ -59,7 +57,7 @@ function EditLeaveTypePage({ token }) {
   if (pageLoading) {
     return (
       <div className="container">
-        <LoadingState message="Loading leave type..." />
+        <p style={{ textAlign: 'center', padding: '20px' }}>Loading...</p>
       </div>
     );
   }
@@ -67,15 +65,15 @@ function EditLeaveTypePage({ token }) {
   if (fetchError) {
     return (
       <div className="container">
-        <ErrorState message={fetchError} onRetry={loadLeaveType} />
+        <div className="alert alert-danger">{fetchError}</div>
       </div>
     );
   }
 
   return (
-    <div className="container" style={{ maxWidth: '640px' }}>
+    <div className="container" style={{ maxWidth: '540px' }}>
       <div className="card">
-        <h2 className="card-title">Edit Leave Type</h2>
+        <h2 style={{ marginBottom: '16px' }}>Edit Leave Type</h2>
         <LeaveTypeForm
           initialValues={initialData}
           onSubmit={handleSubmit}

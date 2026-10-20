@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getLeaveTypes, deleteLeaveType } from '../api/leaveTypeApi';
-import LoadingState from '../components/LoadingState';
-import ErrorState from '../components/ErrorState';
-import EmptyState from '../components/EmptyState';
 
 function LeaveTypesListPage({ token }) {
   const [leaveTypes, setLeaveTypes] = useState([]);
@@ -33,30 +30,30 @@ function LeaveTypesListPage({ token }) {
   }, [token]);
 
   const handleDelete = async (id, name) => {
-    if (!window.confirm(`Are you sure you want to delete the leave type "${name}"?`)) {
+    if (!window.confirm(`Are you sure you want to delete ${name}?`)) {
       return;
     }
 
     try {
       const res = await deleteLeaveType(id, token);
       if (res.success) {
-        setActionMessage(`Leave type "${name}" was deleted successfully.`);
+        setActionMessage('Leave type deleted successfully');
         loadLeaveTypes();
-        setTimeout(() => setActionMessage(''), 4000);
+        setTimeout(() => setActionMessage(''), 3000);
       } else {
         alert(res.message || 'Cannot delete leave type');
       }
     } catch (err) {
-      alert('Error occurred while deleting leave type');
+      alert('Error deleting leave type');
     }
   };
 
   return (
     <div className="container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800 }}>Manage Leave Types</h1>
-          <p style={{ color: '#64748b', fontSize: '0.95rem' }}>Configure yearly leave quotas and categories</p>
+          <h2>Manage Leave Types</h2>
+          <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Configure leave quotas</p>
         </div>
         <Link to="/admin/leave-types/new" className="btn btn-primary">
           + Add Leave Type
@@ -66,14 +63,13 @@ function LeaveTypesListPage({ token }) {
       {actionMessage && <div className="alert alert-success">{actionMessage}</div>}
 
       <div className="card">
-        {loading && <LoadingState message="Loading leave types..." />}
-        {error && <ErrorState message={error} onRetry={loadLeaveTypes} />}
+        {loading && <p style={{ textAlign: 'center', padding: '20px' }}>Loading leave types...</p>}
+        {error && <div className="alert alert-danger">{error}</div>}
 
         {!loading && !error && leaveTypes.length === 0 && (
-          <EmptyState
-            title="No Leave Types Configured"
-            message="No leave types found. Click '+ Add Leave Type' above to create one."
-          />
+          <p style={{ textAlign: 'center', padding: '20px', color: '#64748b' }}>
+            No leave types found. Click "+ Add Leave Type" to create one.
+          </p>
         )}
 
         {!loading && !error && leaveTypes.length > 0 && (
@@ -84,23 +80,19 @@ function LeaveTypesListPage({ token }) {
                   <th>Leave Type Name</th>
                   <th>Yearly Quota</th>
                   <th>Status</th>
-                  <th>Last Updated</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {leaveTypes.map((type) => (
                   <tr key={type._id}>
-                    <td>
-                      <strong>{type.name}</strong>
-                    </td>
+                    <td><strong>{type.name}</strong></td>
                     <td>{type.yearlyQuota} Days / Year</td>
                     <td>
                       <span className={`badge ${type.isActive ? 'badge-active' : 'badge-inactive'}`}>
                         {type.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </td>
-                    <td>{new Date(type.updatedAt).toLocaleDateString()}</td>
                     <td>
                       <div style={{ display: 'flex', gap: '8px' }}>
                         <Link to={`/admin/leave-types/${type._id}/edit`} className="btn btn-secondary btn-sm">

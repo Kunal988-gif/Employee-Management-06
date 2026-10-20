@@ -4,46 +4,24 @@ const LeaveType = require('../models/LeaveType');
 const calculateLeaveDays = (startDate, endDate) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
-
-  start.setHours(0, 0, 0, 0);
-  end.setHours(0, 0, 0, 0);
-
-  if (end < start) {
-    throw new Error('End date cannot be earlier than start date');
-  }
-
-  let days = 0;
-  const current = new Date(start);
-
-  while (current <= end) {
-    if (current.getDay() !== 0) {
-      days++;
-    }
-    current.setDate(current.getDate() + 1);
-  }
-
-  return days;
+  const diffTime = end.getTime() - start.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+  return diffDays > 0 ? diffDays : 0;
 };
 
 const checkLeaveOverlap = async (employeeId, startDate, endDate, excludeRequestId = null) => {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  start.setHours(0, 0, 0, 0);
-  end.setHours(23, 59, 59, 999);
-
   const query = {
     employee: employeeId,
     status: { $in: ['pending', 'approved'] },
-    startDate: { $lte: end },
-    endDate: { $gte: start }
+    startDate: { $lte: new Date(endDate) },
+    endDate: { $gte: new Date(startDate) }
   };
 
   if (excludeRequestId) {
     query._id = { $ne: excludeRequestId };
   }
 
-  const existingRequest = await LeaveRequest.findOne(query).populate('leaveType', 'name');
-  return existingRequest;
+  return await LeaveRequest.findOne(query);
 };
 
 const calculateEmployeeBalance = async (employeeId, leaveTypeId, year) => {
@@ -52,8 +30,8 @@ const calculateEmployeeBalance = async (employeeId, leaveTypeId, year) => {
     throw new Error('Leave type not found');
   }
 
-  const startOfYear = new Date(year, 0, 1, 0, 0, 0, 0);
-  const endOfYear = new Date(year, 11, 31, 23, 59, 59, 999);
+  const startOfYear = new Date(year, 0, 1);
+  const endOfYear = new Date(year, 11, 31, 23, 59, 59);
 
   const approvedRequests = await LeaveRequest.find({
     employee: employeeId,

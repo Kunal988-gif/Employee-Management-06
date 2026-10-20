@@ -19,40 +19,18 @@ const getDashboardStats = async (req, res, next) => {
 
     const employeesOnLeaveToday = activeLeavesToday.length;
 
-    const departmentLeaveStats = await LeaveRequest.aggregate([
-      {
-        $match: { status: 'approved' }
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'employee',
-          foreignField: '_id',
-          as: 'employeeDetails'
-        }
-      },
-      {
-        $unwind: '$employeeDetails'
-      },
-      {
-        $group: {
-          _id: '$employeeDetails.department',
-          totalLeaves: { $sum: 1 },
-          totalDays: { $sum: '$numberOfDays' }
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          department: '$_id',
-          totalLeaves: 1,
-          totalDays: 1
-        }
-      },
-      {
-        $sort: { totalLeaves: -1 }
+    const approvedLeaves = await LeaveRequest.find({ status: 'approved' }).populate('employee', 'department');
+    const deptMap = {};
+    approvedLeaves.forEach((item) => {
+      const dept = item.employee?.department || 'General';
+      if (!deptMap[dept]) {
+        deptMap[dept] = { department: dept, totalLeaves: 0, totalDays: 0 };
       }
-    ]);
+      deptMap[dept].totalLeaves += 1;
+      deptMap[dept].totalDays += item.numberOfDays;
+    });
+
+    const departmentLeaveStats = Object.values(deptMap);
 
     const totalEmployees = await User.countDocuments({ role: 'employee' });
     const approvedCount = await LeaveRequest.countDocuments({ status: 'approved' });
