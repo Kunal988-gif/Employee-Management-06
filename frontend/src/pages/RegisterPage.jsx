@@ -70,7 +70,7 @@ function RegisterPage({ onLogin }) {
               name="name"
               type="text"
               className="form-control"
-              placeholder="e.g. Alice Smith"
+              placeholder="Full Name"
               value={formData.name}
               onChange={handleChange}
               required
@@ -85,7 +85,7 @@ function RegisterPage({ onLogin }) {
                 name="email"
                 type="email"
                 className="form-control"
-                placeholder="alice@company.com"
+                placeholder="Email Address"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -99,7 +99,7 @@ function RegisterPage({ onLogin }) {
                 name="password"
                 type="password"
                 className="form-control"
-                placeholder="••••••••"
+                placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}
                 required
@@ -115,7 +115,7 @@ function RegisterPage({ onLogin }) {
                 name="employeeId"
                 type="text"
                 className="form-control"
-                placeholder="e.g. EMP-102"
+                placeholder="Employee ID"
                 value={formData.employeeId}
                 onChange={handleChange}
                 required
@@ -129,7 +129,7 @@ function RegisterPage({ onLogin }) {
                 name="department"
                 type="text"
                 className="form-control"
-                placeholder="e.g. Engineering, Sales, Finance"
+                placeholder="Department"
                 value={formData.department}
                 onChange={handleChange}
                 required
@@ -145,7 +145,7 @@ function RegisterPage({ onLogin }) {
                 name="designation"
                 type="text"
                 className="form-control"
-                placeholder="e.g. Software Engineer"
+                placeholder="Designation"
                 value={formData.designation}
                 onChange={handleChange}
                 required
@@ -172,7 +172,7 @@ function RegisterPage({ onLogin }) {
             style={{ width: '100%', marginTop: '12px' }}
             disabled={loading}
           >
-            {loading ? 'Creating Account...' : 'Register as Employee'}
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
 

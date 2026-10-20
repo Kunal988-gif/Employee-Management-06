@@ -53,7 +53,7 @@ function LoginPage({ onLogin }) {
               id="loginEmail"
               type="email"
               className="form-control"
-              placeholder="e.g. employee@company.com"
+              placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -66,7 +66,7 @@ function LoginPage({ onLogin }) {
               id="loginPassword"
               type="password"
               className="form-control"
-              placeholder="Enter your password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

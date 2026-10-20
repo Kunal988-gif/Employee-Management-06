@@ -1,23 +1,23 @@
 # Employee Leave Management System
 
-A full-stack web application built using Node.js, Express, MongoDB Atlas, and React. This system allows employees to apply for leaves, track their leave history and balances, while enabling administrators to manage leave categories, review requests, and monitor department-level leave statistics.
+A full-stack web application built with Node.js, Express, MongoDB Atlas, and React. Employees can register, check their leave balances, and apply for leaves. Admins can manage leave types, approve or reject leave applications, and view dashboard statistics.
 
 ## Features
 
 ### Employee
-- User registration and login with JWT authentication
-- View available leave balances across different leave types
-- Apply for leave with automatic working days calculation (excluding Sundays)
-- Validation against overlapping leave requests and insufficient balances
-- View personal leave request history with approval status and remarks
+- Register and login with JWT authentication
+- Check available leave balances for each leave type
+- Apply for leave (automatically excludes Sundays from day count)
+- Prevents applying for overlapping dates or when balance is insufficient
+- View personal leave history, status, and admin remarks
 - Cancel pending leave requests
 
-### Administrator
-- Admin dashboard displaying pending requests, employees on leave today, and department metrics
-- Review pending leave applications with options to approve or reject with remarks
-- Automatic deduction of leave balance upon approval
-- Create, update, view, and delete leave types with yearly quotas
-- Safeguards to prevent deleting leave types that have associated leave requests
+### Admin
+- Dashboard showing pending requests, employees on leave today, and department stats
+- Review pending leave requests (approve or reject with remarks)
+- Leave balance gets deducted when a request is approved
+- Add, edit, view, and disable/delete leave types
+- Cannot delete leave types that already have requests linked to them
 
 ## Tech Stack
 

@@ -96,7 +96,6 @@ function LeaveDetailPage({ token, user }) {
           </span>
         </div>
 
-        {/* Details Grid */}
         <div className="detail-grid">
           <div className="detail-item">
             <div className="detail-label">Leave Type</div>
@@ -131,7 +130,6 @@ function LeaveDetailPage({ token, user }) {
           </div>
         </div>
 
-        {/* Reason section */}
         <div style={{ marginBottom: '20px' }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '6px' }}>Reason for Leave:</h3>
           <div style={{ padding: '12px 16px', background: '#f8fafc', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
@@ -139,7 +137,6 @@ function LeaveDetailPage({ token, user }) {
           </div>
         </div>
 
-        {/* Remarks section */}
         <div style={{ marginBottom: '24px' }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '6px' }}>Admin Remarks:</h3>
           <div style={{ padding: '12px 16px', background: '#f8fafc', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
@@ -147,7 +144,6 @@ function LeaveDetailPage({ token, user }) {
           </div>
         </div>
 
-        {/* Action button if pending and owned by current employee */}
         {user && user.role === 'employee' && leave.status === 'pending' && (
           <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
             <button onClick={handleCancel} className="btn btn-danger">

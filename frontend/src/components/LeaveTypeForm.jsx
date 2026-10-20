@@ -49,7 +49,7 @@ function LeaveTypeForm({ initialValues, onSubmit, loading, error, isEdit = false
           id="leaveTypeName"
           type="text"
           className="form-control"
-          placeholder="e.g. Casual Leave, Sick Leave, Earned Leave"
+          placeholder="Leave Type Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -57,13 +57,13 @@ function LeaveTypeForm({ initialValues, onSubmit, loading, error, isEdit = false
       </div>
 
       <div className="form-group">
-        <label htmlFor="yearlyQuota">Yearly Quota (in days) *</label>
+        <label htmlFor="yearlyQuota">Yearly Quota (Days) *</label>
         <input
           id="yearlyQuota"
           type="number"
           min="1"
           className="form-control"
-          placeholder="e.g. 12"
+          placeholder="12"
           value={yearlyQuota}
           onChange={(e) => setYearlyQuota(e.target.value)}
           required
@@ -79,7 +79,7 @@ function LeaveTypeForm({ initialValues, onSubmit, loading, error, isEdit = false
           style={{ width: '18px', height: '18px' }}
         />
         <label htmlFor="isActive" style={{ margin: 0, cursor: 'pointer' }}>
-          Active (Available for employees to select when applying for leave)
+          Active
         </label>
       </div>
 

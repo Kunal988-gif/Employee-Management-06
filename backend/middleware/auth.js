@@ -18,7 +18,7 @@ const authHandler = async (req, res, next) => {
       if (!user) {
         return res.status(401).json({
           success: false,
-          message: 'User belonging to this token no longer exists.'
+          message: 'User not found'
         });
       }
 
@@ -45,7 +45,7 @@ const allowRoles = (...roles) => {
     if (!req.user || !roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        message: `Forbidden: Access restricted to roles: [${roles.join(', ')}]`
+        message: 'Access denied: Unauthorized role'
       });
     }
     next();

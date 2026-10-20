@@ -180,7 +180,7 @@ function ApplyLeavePage({ token }) {
               id="reason"
               rows="4"
               className="form-control"
-              placeholder="Please describe the reason for your leave request..."
+              placeholder="Reason for leave"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               required
@@ -193,7 +193,7 @@ function ApplyLeavePage({ token }) {
             style={{ width: '100%', marginTop: '8px' }}
             disabled={submitting}
           >
-            {submitting ? 'Submitting Application...' : 'Submit Leave Request'}
+            {submitting ? 'Submitting...' : 'Submit Request'}
           </button>
         </form>
       </div>

@@ -16,11 +16,7 @@ app.use(cors({
 app.use(express.json());
 
 app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Employee Leave Management API is running healthy',
-    timestamp: new Date().toISOString()
-  });
+  res.status(200).json({ status: 'ok', message: 'Server is running' });
 });
 
 const authRoutes = require('./routes/authRoutes');

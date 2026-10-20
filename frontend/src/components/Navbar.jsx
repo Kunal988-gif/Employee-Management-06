@@ -13,7 +13,7 @@ function Navbar({ user, onLogout }) {
     <header className="navbar">
       <div className="nav-container">
         <Link to="/" className="nav-brand">
-          <span>🏢</span> LeaveManager
+          LeavePortal
         </Link>
 
         <nav>
