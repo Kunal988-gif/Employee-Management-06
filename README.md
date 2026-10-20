@@ -150,31 +150,25 @@ Open `http://localhost:5173` in your browser.
 
 ## Screenshots
 
-<!-- Add your screenshots here by replacing the placeholders below -->
+
 
 ### 1. Login Page
-<!-- Add screenshot: Login page with email and password fields -->
-*(Screenshot placeholder: Login page)*
+![Login Page](screenshots/01-login.png)
 
 ### 2. Employee - Apply for Leave
-<!-- Add screenshot: Apply leave form with date pickers and balance banner -->
-*(Screenshot placeholder: Apply Leave)*
+![Apply for Leave](screenshots/02-apply-leave.png)
 
 ### 3. Employee - My Leaves & Balances
-<!-- Add screenshot: Leave balance cards and personal leave history table -->
-*(Screenshot placeholder: My Leaves & Balances)*
+![My Leaves & Balances](screenshots/03-my-leaves.png)
 
 ### 4. Admin - Dashboard
-<!-- Add screenshot: Admin dashboard with pending counts, active leaves, and department summary -->
-*(Screenshot placeholder: Admin Dashboard)*
+![Admin Dashboard](screenshots/04-admin-dashboard.png)
 
 ### 5. Admin - Leave Requests Management
-<!-- Add screenshot: Leave requests table with Approve and Reject buttons -->
-*(Screenshot placeholder: Leave Requests)*
+![Leave Requests Management](screenshots/05-admin-leave-requests.png)
 
 ### 6. Admin - Manage Leave Types
-<!-- Add screenshot: Leave types list and quota configuration -->
-*(Screenshot placeholder: Leave Types)*
+
 
 ## Deployment Notes
 
