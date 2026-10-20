@@ -177,7 +177,7 @@ function RegisterPage({ onLogin }) {
         </form>
 
         <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.9rem', color: '#64748b' }}>
-          Already have an account? <Link to="/login" style={{ color: '#2563eb', fontWeight: 600 }}>Login here</Link>
+          Already have an account? <Link to="/login" style={{ color: '#0f766e', fontWeight: 600 }}>Login here</Link>
         </p>
       </div>
     </div>

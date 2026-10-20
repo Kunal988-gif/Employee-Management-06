@@ -84,7 +84,7 @@ function LoginPage({ onLogin }) {
         </form>
 
         <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.9rem', color: '#64748b' }}>
-          Don't have an account? <Link to="/register" style={{ color: '#2563eb', fontWeight: 600 }}>Register here</Link>
+          Don't have an account? <Link to="/register" style={{ color: '#0f766e', fontWeight: 600 }}>Register here</Link>
         </p>
       </div>
     </div>
